@@ -1,0 +1,10 @@
+{
+  "@@locale": "en",
+  "appTitle": "Expense Managemennt AIEX",
+  "rememberLogin": "Remember me",
+  "forgotPassword": "Forgot passwword",
+
+  "homePage": "Home",
+  "statisticPage": "Statistic",
+  "personalPage": "Personal"
+}

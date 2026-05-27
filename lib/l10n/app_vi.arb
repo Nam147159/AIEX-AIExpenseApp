@@ -1,0 +1,10 @@
+{
+  "@@locale": "vi",
+  "appTitle": "Quản lý chi tiêu AIEX",
+  "rememberLogin": "Ghi nhớ đăng nhập",
+  "forgotPassword": "Quên mật khẩu",
+
+  "homePage": "Trang chủ",
+  "statisticPage": "Báo cáo",
+  "personalPage": "Cá nhân"
+}
