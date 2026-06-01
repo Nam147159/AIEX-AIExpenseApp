@@ -5,6 +5,7 @@ import '../../core/themes/app_colors.dart';
 import '../../core/ui/text_field.dart';
 import '../view_models/login_viewmodel.dart';
 import 'package:ai_expense/l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -24,13 +25,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final loginState = ref.watch(loginViewModelProvider);
     final viewModel = ref.read(loginViewModelProvider.notifier);
 
-    ref.listen<LoginState>(loginViewModelProvider, (previous, next) {
-      if (previous?.successMessage == null && next.successMessage != null) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const HomeScreen())
-        );
-      }
-    });
+    ref.listen(loginViewModelProvider, (previous, next) {
+        if (next.successMessage != null) {
+          context.go('/home');
+        }
+      });
 
     return Scaffold(
       backgroundColor: gradientColors.first,
