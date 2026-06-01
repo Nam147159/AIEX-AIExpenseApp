@@ -71,6 +71,7 @@ class LoginViewModel extends StateNotifier<LoginState> {
         isLoading: false,
         successMessage: 'Đăng nhập thành công!'
       );
+      
     } else {
       state = state.copyWith(
         isLoading: false,
