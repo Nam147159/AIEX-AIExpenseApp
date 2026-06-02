@@ -1,10 +1,17 @@
 {
   "@@locale": "en",
-  "appTitle": "Expense Managemennt AIEX",
+  "appTitle": "Expense Management AIEX",
+  "appSubtitle": "Smart expense management with AI",
+  "email": "Email",
+  "password": "Password",
+  "login": "Login",
   "rememberLogin": "Remember me",
-  "forgotPassword": "Forgot passwword",
+  "forgotPassword": "Forgot password",
+  "noAccount": "Don't have an account?",
+  "signUp": "Sign Up",
 
   "homePage": "Home",
+  "expensePage": "Expense",
   "statisticPage": "Statistic",
   "personalPage": "Personal"
 }
