@@ -8,7 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class AIService {
   final model = GenerativeModel(
     model: 'models/gemini-2.5-flash',
-    apiKey: dotenv.env['GOOGLE_API_KEY']!,
+    apiKey: dotenv.env['GEMINI_API_KEY']!
   );
 
   Future<ExpenseItemResponse> generateExpenseFromInput(String input) async {
