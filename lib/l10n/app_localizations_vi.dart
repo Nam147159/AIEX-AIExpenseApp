@@ -12,13 +12,34 @@ class AppLocalizationsVi extends AppLocalizations {
   String get appTitle => 'Quản lý chi tiêu AIEX';
 
   @override
+  String get appSubtitle => 'Quản lý chi tiêu thông minh với AI';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get password => 'Mật khẩu';
+
+  @override
+  String get login => 'Đăng nhập';
+
+  @override
   String get rememberLogin => 'Ghi nhớ đăng nhập';
 
   @override
   String get forgotPassword => 'Quên mật khẩu';
 
   @override
+  String get noAccount => 'Chưa có tài khoản?';
+
+  @override
+  String get signUp => 'Đăng ký';
+
+  @override
   String get homePage => 'Trang chủ';
+
+  @override
+  String get expensePage => 'Chi tiêu';
 
   @override
   String get statisticPage => 'Báo cáo';

@@ -101,8 +101,32 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Expense Managemennt AIEX'**
+  /// **'Expense Management AIEX'**
   String get appTitle;
+
+  /// No description provided for @appSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart expense management with AI'**
+  String get appSubtitle;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login;
 
   /// No description provided for @rememberLogin.
   ///
@@ -113,14 +137,32 @@ abstract class AppLocalizations {
   /// No description provided for @forgotPassword.
   ///
   /// In en, this message translates to:
-  /// **'Forgot passwword'**
+  /// **'Forgot password'**
   String get forgotPassword;
+
+  /// No description provided for @noAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account?'**
+  String get noAccount;
+
+  /// No description provided for @signUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign Up'**
+  String get signUp;
 
   /// No description provided for @homePage.
   ///
   /// In en, this message translates to:
   /// **'Home'**
   String get homePage;
+
+  /// No description provided for @expensePage.
+  ///
+  /// In en, this message translates to:
+  /// **'Expense'**
+  String get expensePage;
 
   /// No description provided for @statisticPage.
   ///

@@ -1,5 +1,10 @@
+import 'package:ai_expense/data/repositories/ai_repository.dart';
+import 'package:ai_expense/data/services/ai_service.dart';
+import 'package:ai_expense/ui/HomeScreen/view_models/ai_expense_state.dart';
+import 'package:ai_expense/ui/HomeScreen/view_models/ai_expense_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ai_expense/domain/models/index.dart';
 
 class HomeState {
   final String input;
@@ -30,6 +35,18 @@ final homeViewModelProvider =
   (ref) => HomeViewModel(),
 );
 
+final aiServiceProvider = Provider<AIService>(
+  (ref) => AIService(),
+);
+
+final aiRepositoryProvider = Provider<AIRepository>(
+  (ref) => AIRepository(ref.read(aiServiceProvider)),
+);
+
+final aiExpenseProvider = StateNotifierProvider<AiExpenseViewModel, AiExpenseState>(
+  (ref) => AiExpenseViewModel(ref.read(aiRepositoryProvider)),
+);
+
 class HomeViewModel extends StateNotifier<HomeState> {
   HomeViewModel(): super(const HomeState());
 
@@ -47,48 +64,48 @@ class HomeViewModel extends StateNotifier<HomeState> {
     state = state.copyWith(input: '', displayText: '');
   }
 
-  bool addExpenseFromInput() {
-    final input = inputController.text.trim();
-    if (input.isEmpty) {
-      return false;
-    }
+  // bool addExpenseFromInput() {
+  //   final input = inputController.text.trim();
+  //   if (input.isEmpty) {
+  //     return false;
+  //   }
 
-    final parts = input.split(RegExp(r'\s+'));
-    final lastToken = parts.isNotEmpty ? parts.last : '';
-    final parsedAmount = int.tryParse(lastToken.replaceAll('.', '').replaceAll(',', ''));
+  //   final parts = input.split(RegExp(r'\s+'));
+  //   final lastToken = parts.isNotEmpty ? parts.last : '';
+  //   final parsedAmount = int.tryParse(lastToken.replaceAll('.', '').replaceAll(',', ''));
 
-    var title = input;
-    var amount = 0;
+  //   var title = input;
+  //   var amount = 0;
 
-    if (parsedAmount != null) {
-      title = parts.sublist(0, parts.length - 1).join(' ').trim();
-      amount = parsedAmount * 1000;
-    }
+  //   if (parsedAmount != null) {
+  //     title = parts.sublist(0, parts.length - 1).join(' ').trim();
+  //     amount = parsedAmount * 1000;
+  //   }
 
-    if (title.isEmpty) {
-      title = 'Chi tiêu';
-    }
+  //   if (title.isEmpty) {
+  //     title = 'Chi tiêu';
+  //   }
 
-    final now = DateTime.now();
-    final hour = now.hour.toString().padLeft(2, '0');
-    final minute = now.minute.toString().padLeft(2, '0');
+  //   final now = DateTime.now();
+  //   final hour = now.hour.toString().padLeft(2, '0');
+  //   final minute = now.minute.toString().padLeft(2, '0');
 
-    final newItem = ExpenseItem(
-      title: title,
-      category: _resolveCategory(title),
-      time: '$hour:$minute',
-      amount: amount,
-      icon: _resolveExpenseIcon(title),
-    );
+  //   final newItem = ExpenseItem(
+  //     expenseItemId: UniqueKey().toString(), // TODO: change to create ID in backend
+  //     title: title,
+  //     category: _resolveCategory(title),
+  //     createdTime: now,
+  //     amount: amount,
+  //   );
 
-    state = state.copyWith(
-      input: '',
-      displayText: '',
-      expenses: [newItem, ...state.expenses],
-    );
-    inputController.clear();
-    return true;
-  }
+  //   state = state.copyWith(
+  //     input: '',
+  //     displayText: '',
+  //     expenses: [newItem, ...state.expenses],
+  //   );
+  //   inputController.clear();
+  //   return true;
+  // }
 
   String formatAmount(int amount) {
     final absDigits = amount.abs().toString();
@@ -105,55 +122,24 @@ class HomeViewModel extends StateNotifier<HomeState> {
     return '-$formatted';
   }
 
-  String _resolveCategory(String title) {
-    final normalized = title.toLowerCase();
+  // ItemCategory _resolveCategory(String title) {
+  //   final normalized = title.toLowerCase();
 
-    if (normalized.contains('an') || normalized.contains('sang') || normalized.contains('trua') || normalized.contains('toi')) {
-      return 'Ăn uống';
-    }
-    if (normalized.contains('xe') || normalized.contains('taxi') || normalized.contains('grab')) {
-      return 'Di chuyển';
-    }
-    if (normalized.contains('cafe') || normalized.contains('tra sua') || normalized.contains('nuoc')) {
-      return 'Đồ uống';
-    }
-    return 'Khác';
-  }
-
-  IconData _resolveExpenseIcon(String title) {
-    final normalized = title.toLowerCase();
-
-    if (normalized.contains('an') || normalized.contains('sang') || normalized.contains('trua') || normalized.contains('toi')) {
-      return Icons.fastfood_outlined;
-    }
-    if (normalized.contains('xe') || normalized.contains('taxi') || normalized.contains('grab')) {
-      return Icons.directions_car_filled_outlined;
-    }
-    if (normalized.contains('cafe') || normalized.contains('tra sua') || normalized.contains('nuoc')) {
-      return Icons.local_cafe_outlined;
-    }
-    return Icons.receipt_long_outlined;
-  }
+  //   if (normalized.contains('an') || normalized.contains('sang') || normalized.contains('trua') || normalized.contains('toi')) {
+  //     return ItemCategory(name: 'Ăn uống', iconName: 'fastfood_outlined');
+  //   }
+  //   if (normalized.contains('xe') || normalized.contains('taxi') || normalized.contains('grab')) {
+  //     return ItemCategory(name: 'Di chuyển', iconName: 'directions_car_filled_outlined');
+  //   }
+  //   if (normalized.contains('cafe') || normalized.contains('tra sua') || normalized.contains('nuoc')) {
+  //     return ItemCategory(name: 'Đồ uống', iconName: 'local_cafe_outlined');
+  //   }
+  //   return ItemCategory(name: 'Khác', iconName: 'receipt_long_outlined');
+  // }
 
   @override
   void dispose() {
     inputController.dispose();
     super.dispose();
   }
-}
-
-class ExpenseItem {
-  const ExpenseItem({
-    required this.title,
-    required this.category,
-    required this.time,
-    required this.amount,
-    required this.icon,
-  });
-
-  final String title;
-  final String category;
-  final String time;
-  final int amount;
-  final IconData icon;
 }

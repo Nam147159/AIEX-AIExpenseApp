@@ -66,14 +66,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       _buildHeader(theme),
                       const SizedBox(height: 32),
                       AppTextField(
-                        label: 'Email',
+                        label: l10n.email,
                         hintText: 'email@example.com',
                         controller: viewModel.emailController,
                         keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: 18),
                       AppTextField(
-                        label: 'Mật khẩu',
+                        label: l10n.password,
                         hintText: '••••••••',
                         controller: viewModel.passwordController,
                         obscureText: true,
@@ -133,7 +133,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ),
         const SizedBox(height: 8),
         Text(
-          'Quản lý chi tiêu thông minh với AI',
+          l10n.appSubtitle,
           textAlign: TextAlign.center,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: const Color(0xFF667085),
@@ -182,13 +182,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             foregroundColor: const Color(0xFF5B7DFF),
             textStyle: const TextStyle(fontWeight: FontWeight.w600),
           ),
-          child: const Text('Quên mật khẩu?'),
+          child: Text(l10n.forgotPassword),
         ),
       ],
     );
   }
 
   Widget _buildLoginButton(ThemeData theme, LoginState loginState, LoginViewModel viewModel) {
+    final l10n = AppLocalizations.of(context)!;
+
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -215,7 +217,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             alignment: Alignment.center,
             height: 56,
             child: Text(
-              'Đăng nhập',
+              l10n.login,
               style: theme.textTheme.labelLarge?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
@@ -228,17 +230,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   }
 
   Widget _buildFooter(ThemeData theme) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
-          'Chưa có tài khoản? ',
+         Text(
+          l10n.noAccount,
           style: TextStyle(fontSize: 14, color: Color(0xFF667085)),
         ),
         GestureDetector(
           onTap: () {},
           child: Text(
-            'Đăng ký ngay',
+            l10n.signUp,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: const Color(0xFF4B6AF3),
               fontWeight: FontWeight.w700,
