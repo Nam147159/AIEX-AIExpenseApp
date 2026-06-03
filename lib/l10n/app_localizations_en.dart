@@ -36,14 +36,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get signUp => 'Sign Up';
 
   @override
-  String get homePage => 'Home';
+  String get homeScreen => 'Home';
 
   @override
-  String get expensePage => 'Expense';
+  String get expenseScreen => 'Expense';
 
   @override
-  String get statisticPage => 'Statistic';
+  String get statisticScreen => 'Statistic';
 
   @override
-  String get personalPage => 'Personal';
+  String get profileScreen => 'Profile';
 }

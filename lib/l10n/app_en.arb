@@ -10,8 +10,8 @@
   "noAccount": "Don't have an account?",
   "signUp": "Sign Up",
 
-  "homePage": "Home",
-  "expensePage": "Expense",
-  "statisticPage": "Statistic",
-  "personalPage": "Personal"
+  "homeScreen": "Home",
+  "expenseScreen": "Expense",
+  "statisticScreen": "Statistic",
+  "profileScreen": "Profile"
 }

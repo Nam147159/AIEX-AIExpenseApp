@@ -1,11 +1,11 @@
 import 'dart:math' as math;
+import 'package:ai_expense/test/dummy_expense_data.dart';
 import 'package:ai_expense/ui/HomeScreen/view_models/ai_expense_state.dart';
 import 'package:ai_expense/ui/HomeScreen/view_models/home_viewmodel.dart';
 import 'package:ai_expense/ui/core/ui/text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/themes/app_colors.dart';
-import 'package:ai_expense/l10n/app_localizations.dart';
 import 'package:ai_expense/domain/models/index.dart';
 import 'package:ai_expense/utils/utils.dart';
 
@@ -16,7 +16,6 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +24,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final state = ref.watch(homeViewModelProvider);
     final viewModel = ref.read(homeViewModelProvider.notifier);
     final aiState = ref.watch(aiExpenseProvider);
+    final expensesForDisplay = buildDummyExpensesForDisplay(aiState.expense);
 
     ref.listen<AiExpenseState>(aiExpenseProvider, (previous, next) {
       final hasNewError =
@@ -40,25 +40,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      bottomNavigationBar: _buildBottomBar(theme),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
-                gradient: LinearGradient(
-                colors: gradientColors,
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
+      backgroundColor: const Color(0xFFF6F7F8),
+      body: Column(
+        children: [
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
             ),
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.fromLTRB(
+                20,
+                MediaQuery.of(context).padding.top + 20,
+                20,
+                0,
+              ),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: gradientColors,
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
               alignment: Alignment.topLeft,
               child: Column(
                 children: [
@@ -68,59 +72,67 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                   _buildTotalExpenseCard(theme),
 
-                  const SizedBox(height: 20)
+                  const SizedBox(height: 20),
                 ],
-              )
-            ),
-
-            _buildExpenseInput(),
-
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Chi tiêu hôm nay",
-                  textAlign: TextAlign.left,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20
-                  ),
-                ),
               ),
             ),
-
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-                ),
-                child: aiState.expense == null
-                    ? Center(
-                        child: Text(
-                          'Chưa có chi tiêu nào',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: const Color(0xFF98A2B3),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      )
-                    : ScrollConfiguration(
-                        behavior: const _NoStretchScrollBehavior(),
-                        child: ListView.separated(
-                          physics: const ClampingScrollPhysics(),
-                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 12),
-                          itemCount: aiState.expense == null ? 0 : 1,
-                          separatorBuilder: (_, _) => const SizedBox(height: 10),
-                          itemBuilder: (context, index) => _buildExpenseCard(theme, aiState.expense!, viewModel),
+          ),
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              color: const Color(0xFFF6F7F8),
+              child: Column(
+                children: [
+                  _buildExpenseInput(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Chi tiêu hôm nay',
+                        textAlign: TextAlign.left,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
                         ),
                       ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFF6F7F8),
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+                      ),
+                      child: expensesForDisplay.isEmpty
+                          ? Center(
+                              child: Text(
+                                'Chưa có chi tiêu nào',
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: const Color(0xFF98A2B3),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                            : ScrollConfiguration(
+                              behavior: const NoStretchScrollBehavior(),
+                              child: ListView.separated(
+                                physics: const ClampingScrollPhysics(),
+                                padding: const EdgeInsets.fromLTRB(10, 0, 10, 12),
+                                itemCount: expensesForDisplay.length,
+                                separatorBuilder: (_, _) => const SizedBox(height: 10),
+                                itemBuilder: (context, index) =>
+                                  _buildExpenseCard(theme, expensesForDisplay[index], viewModel),
+                              ),
+                            ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -309,8 +321,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _buildExpenseCard(ThemeData theme, ExpenseItem expense, HomeViewModel viewModel) {
-    final aiState = ref.watch(aiExpenseProvider);
-
     return Container(
       width: double.infinity,
       height: 85,
@@ -375,7 +385,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                viewModel.formatAmount(aiState.expense!.amount.toInt()),
+                viewModel.formatAmount(expense.amount.toInt()),
                 style: theme.textTheme.titleMedium?.copyWith(
                   color: const Color(0xFFFF2B2B),
                   fontWeight: FontWeight.w700,
@@ -394,61 +404,5 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     );
   }
-  
-  Widget _buildBottomBar(ThemeData theme) {
-    final l10n = AppLocalizations.of(context)!;
 
-    return Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: AppColors.borderColor,
-            width: 1,
-          ),
-        ),
-      ),
-      child: NavigationBar(
-        selectedIndex: _selectedIndex,
-        elevation: 0,
-        height: 64,
-        backgroundColor: Colors.white,
-        onDestinationSelected: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        destinations: [
-          _buildNavigationItem(theme, Icons.home_rounded, l10n.homePage),
-          _buildNavigationItem(theme, Icons.monetization_on_outlined, l10n.expensePage),
-          _buildNavigationItem(theme, Icons.bar_chart_rounded, l10n.statisticPage),
-          _buildNavigationItem(theme, Icons.person_rounded, l10n.personalPage),
-        ],
-      ),
-    );  
-  }
-
-  Widget _buildNavigationItem(ThemeData theme, IconData icon, String label) {
-    return NavigationDestination(
-      icon: Icon(
-        icon,
-        size: 24,
-        color: const Color(0xFF98A2B3),
-      ),
-      selectedIcon: Icon(
-        icon,
-        size: 24,
-        color: AppColors.gradientColorStart,
-      ),
-      label: label,
-    );
-  }
-}
-
-class _NoStretchScrollBehavior extends MaterialScrollBehavior {
-  const _NoStretchScrollBehavior();
-
-  @override
-  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) {
-    return child;
-  }
 }

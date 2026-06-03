@@ -10,4 +10,5 @@ abstract final class AppColors {
   static const errorColor = Colors.red;
   static const successColor = Colors.green;
   static const borderColor = Color(0xFFE5E7EB);
+  static const dividerColor = Color.fromARGB(255, 226, 230, 233);
 }
