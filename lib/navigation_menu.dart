@@ -14,7 +14,19 @@ class NavigationMenu extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     
     return Scaffold(
-      body: navigationShell,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primaryColor,
+        shape: ShapeBorder.lerp(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+          0.5,
+        ),
+        onPressed: () {
+          context.push('/add-expense');
+        },
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
+      floatingActionButtonLocation: const LowerCenterFabLocation(),
       bottomNavigationBar: NavigationBar(
         selectedIndex: navigationShell.currentIndex,
         elevation: 0,
@@ -32,7 +44,8 @@ class NavigationMenu extends StatelessWidget {
           // _buildNavigationItem(theme, Icons.bar_chart_rounded, l10n.statisticScreen),
           _buildNavigationItem(theme, Icons.person_rounded, l10n.profileScreen),
         ],
-      )
+      ),
+      body: navigationShell
     );
   }
 
@@ -46,9 +59,24 @@ class NavigationMenu extends StatelessWidget {
       selectedIcon: Icon(
         icon,
         size: 24,
-        color: AppColors.gradientColorStart,
+        color: AppColors.primaryColor,
       ),
       label: label,
     );
+  }
+}
+
+class LowerCenterFabLocation extends FloatingActionButtonLocation {
+  const LowerCenterFabLocation();
+
+  @override
+  Offset getOffset(ScaffoldPrelayoutGeometry geometry) {
+    final double fabX =
+        (geometry.scaffoldSize.width - geometry.floatingActionButtonSize.width) / 2;
+
+    final double fabY =
+        geometry.contentBottom - geometry.floatingActionButtonSize.height / 2 + 10;
+
+    return Offset(fabX, fabY);
   }
 }

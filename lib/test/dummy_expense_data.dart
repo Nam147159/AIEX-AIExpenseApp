@@ -68,5 +68,27 @@ List<ExpenseItem> buildDummyExpensesForDisplay(ExpenseItem? expense) {
       createdTime: now.subtract(const Duration(hours: 6, minutes: 30)),
       amount: 120000,
     ),
+    ExpenseItem(
+      expenseItemId: 'dummy-expense-005',
+      title: 'Mua do dung',
+      category: ItemCategory(
+        itemCategoryId: 'shopping',
+        name: 'Mua sam',
+        iconName: 'receipt_long_outlined',
+      ),
+      createdTime: now.subtract(const Duration(hours: 6, minutes: 30)),
+      amount: 120000,
+    ),
+    ExpenseItem(
+      expenseItemId: 'dummy-expense-005',
+      title: 'Mua do dung',
+      category: ItemCategory(
+        itemCategoryId: 'shopping',
+        name: 'Mua sam',
+        iconName: 'receipt_long_outlined',
+      ),
+      createdTime: now.subtract(const Duration(hours: 6, minutes: 30)),
+      amount: 120000,
+    ),
   ];
 }

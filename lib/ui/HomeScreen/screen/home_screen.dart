@@ -16,11 +16,41 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  DateTime _selectedDate = DateTime.now();
+
+  void _goToPreviousDay() {
+    setState(() {
+      _selectedDate = _selectedDate.subtract(const Duration(days: 1));
+    });
+  }
+
+  void _goToNextDay() {
+    setState(() {
+      _selectedDate = _selectedDate.add(const Duration(days: 1));
+    });
+  }
+
+  Future<void> _pickDate(BuildContext context) async {
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(now.year - 5),
+      lastDate: DateTime(now.year + 5),
+      locale: const Locale('vi', 'VN'),
+    );
+
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final gradientColors = [AppColors.gradientColorStart, AppColors.gradientColorEnd];
+    final statusBarHeight = MediaQuery.of(context).padding.top;
     final state = ref.watch(homeViewModelProvider);
     final viewModel = ref.read(homeViewModelProvider.notifier);
     final aiState = ref.watch(aiExpenseProvider);
@@ -41,27 +71,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF6F7F8),
-      body: Column(
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(30),
-              bottomRight: Radius.circular(30),
-            ),
-            child: Container(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Container(
               width: double.infinity,
               padding: EdgeInsets.fromLTRB(
                 20,
-                MediaQuery.of(context).padding.top + 20,
+                20,
                 20,
                 0,
               ),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: gradientColors,
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
+                color: AppColors.primaryColor,
               ),
               alignment: Alignment.topLeft,
               child: Column(
@@ -76,91 +98,151 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ],
               ),
             ),
-          ),
-          Expanded(
-            child: Container(
-              width: double.infinity,
-              color: const Color(0xFFF6F7F8),
-              child: Column(
-                children: [
-                  _buildExpenseInput(),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                color: const Color(0xFFF6F7F8),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF6F7F8),
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+                        ),
+                        child: ScrollConfiguration(
+                          behavior: const NoStretchScrollBehavior(),
+                          child: CustomScrollView(
+                            physics: const ClampingScrollPhysics(),
+                            slivers: [
+                              SliverToBoxAdapter(
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(10, 15, 10, 0),
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Lịch sử chi tiêu',
+                                          style: theme.textTheme.titleMedium?.copyWith(
+                                            color: const Color(0xFF101828),
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 18,
+                                          ),
+                                        ),
 
-                  const SizedBox(height: 15),
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 34,
+                                              height: 34,
+                                              child: IconButton(
+                                                onPressed: _goToPreviousDay,
+                                                style: IconButton.styleFrom(
+                                                  padding: EdgeInsets.zero,
+                                                  minimumSize: const Size(34, 34),
+                                                ),
+                                                icon: const Icon(Icons.chevron_left),
+                                              ),
+                                            ),
 
-                  Expanded(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFF6F7F8),
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-                      ),
-                      child: ScrollConfiguration(
-                        behavior: const NoStretchScrollBehavior(),
-                        child: CustomScrollView(
-                          physics: const ClampingScrollPhysics(),
-                          slivers: [
-                            SliverToBoxAdapter(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    'Chi tiêu hôm nay',
-                                    textAlign: TextAlign.left,
-                                    style: theme.textTheme.bodyMedium?.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 20,
-                                    ),
+                                            const SizedBox(width: 6),
+
+                                            InkWell(
+                                              onTap: () => _pickDate(context),
+                                              borderRadius: BorderRadius.circular(10),
+                                              child: Container(
+                                                padding: const EdgeInsets.symmetric(
+                                                  horizontal: 12,
+                                                  vertical: 8,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                    color: const Color(0xFFD0D5DD),
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  '${_selectedDate.day.toString().padLeft(2, '0')}/${_selectedDate.month.toString().padLeft(2, '0')}/${_selectedDate.year}',
+                                                  style: theme.textTheme.bodySmall?.copyWith(
+                                                    color: const Color(0xFF344054),
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+
+                                            const SizedBox(width: 6),
+
+                                            SizedBox(
+                                              width: 34,
+                                              height: 34,
+                                              child: IconButton(
+                                                onPressed: _goToNextDay,
+                                                style: IconButton.styleFrom(
+                                                  padding: EdgeInsets.zero,
+                                                  minimumSize: const Size(34, 34),
+                                                ),
+                                                icon: const Icon(Icons.chevron_right),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    )
                                   ),
                                 ),
                               ),
-                            ),
-                            const SliverToBoxAdapter(child: SizedBox(height: 10)),
-                            if (expensesForDisplay.isEmpty)
-                              SliverFillRemaining(
-                                hasScrollBody: false,
-                                child: Center(
-                                  child: Text(
-                                    'Chưa có chi tiêu nào',
-                                    style: theme.textTheme.bodyMedium?.copyWith(
-                                      color: const Color(0xFF98A2B3),
-                                      fontWeight: FontWeight.w500,
+                              const SliverToBoxAdapter(child: SizedBox(height: 10)),
+                              if (expensesForDisplay.isEmpty)
+                                SliverFillRemaining(
+                                  hasScrollBody: false,
+                                  child: Center(
+                                    child: Text(
+                                      'Chưa có chi tiêu nào',
+                                      style: theme.textTheme.bodyMedium?.copyWith(
+                                        color: const Color(0xFF98A2B3),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              else
+                                SliverPadding(
+                                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 12),
+                                  sliver: SliverList(
+                                    delegate: SliverChildBuilderDelegate(
+                                      (context, index) {
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                            bottom: index == expensesForDisplay.length - 1 ? 0 : 10,
+                                          ),
+                                          child: _buildExpenseCard(
+                                            theme,
+                                            expensesForDisplay[index],
+                                            viewModel,
+                                          ),
+                                        );
+                                      },
+                                      childCount: expensesForDisplay.length,
                                     ),
                                   ),
                                 ),
-                              )
-                            else
-                              SliverPadding(
-                                padding: const EdgeInsets.fromLTRB(10, 0, 10, 12),
-                                sliver: SliverList(
-                                  delegate: SliverChildBuilderDelegate(
-                                    (context, index) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(
-                                          bottom: index == expensesForDisplay.length - 1 ? 0 : 10,
-                                        ),
-                                        child: _buildExpenseCard(
-                                          theme,
-                                          expensesForDisplay[index],
-                                          viewModel,
-                                        ),
-                                      );
-                                    },
-                                    childCount: expensesForDisplay.length,
-                                  ),
-                                ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
+      )
     );
   }
 
@@ -172,7 +254,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Xin chào!',
+              'Xin chào Nam!',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w500,
@@ -187,21 +269,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ],
         ),
-        IconButton(
-          onPressed: () {
-            // TODO: Add functionality later
-          }, 
-          icon: const Icon(
-            Icons.calendar_today_outlined,
-            size: 24,
-            color: Colors.white,
-          ),
-          style: IconButton.styleFrom(
-            backgroundColor: Colors.white.withValues(alpha: 0.1),
-            shape: const CircleBorder(),
-            padding: const EdgeInsets.all(16),
-          ),
-        )
       ],
     );
   }

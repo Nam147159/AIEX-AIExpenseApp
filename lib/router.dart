@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:ai_expense/ui/LoginScreen/screen/login_screen.dart';
 import 'package:ai_expense/ui/HomeScreen/screen/home_screen.dart';
 import 'package:ai_expense/ui/ProfileScreen/screen/profile_screen.dart';
+import 'package:ai_expense/ui/AddExpenseScreen/screen/add_expense_screen.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -13,6 +14,12 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/login',
         builder: (context, state) {
           return const LoginScreen();
+        },
+      ),
+      GoRoute(
+        path: '/add-expense',
+        builder: (context, state) {
+          return const AddExpenseScreen();
         },
       ),
       StatefulShellRoute.indexedStack(
