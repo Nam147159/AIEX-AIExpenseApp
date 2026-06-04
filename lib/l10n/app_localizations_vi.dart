@@ -36,14 +36,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get signUp => 'Đăng ký';
 
   @override
-  String get homePage => 'Trang chủ';
+  String get homeScreen => 'Trang chủ';
 
   @override
-  String get expensePage => 'Chi tiêu';
+  String get expenseScreen => 'Chi tiêu';
 
   @override
-  String get statisticPage => 'Báo cáo';
+  String get statisticScreen => 'Báo cáo';
 
   @override
-  String get personalPage => 'Cá nhân';
+  String get profileScreen => 'Cá nhân';
 }

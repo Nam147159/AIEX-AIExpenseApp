@@ -152,29 +152,29 @@ abstract class AppLocalizations {
   /// **'Sign Up'**
   String get signUp;
 
-  /// No description provided for @homePage.
+  /// No description provided for @homeScreen.
   ///
   /// In en, this message translates to:
   /// **'Home'**
-  String get homePage;
+  String get homeScreen;
 
-  /// No description provided for @expensePage.
+  /// No description provided for @expenseScreen.
   ///
   /// In en, this message translates to:
   /// **'Expense'**
-  String get expensePage;
+  String get expenseScreen;
 
-  /// No description provided for @statisticPage.
+  /// No description provided for @statisticScreen.
   ///
   /// In en, this message translates to:
   /// **'Statistic'**
-  String get statisticPage;
+  String get statisticScreen;
 
-  /// No description provided for @personalPage.
+  /// No description provided for @profileScreen.
   ///
   /// In en, this message translates to:
-  /// **'Personal'**
-  String get personalPage;
+  /// **'Profile'**
+  String get profileScreen;
 }
 
 class _AppLocalizationsDelegate

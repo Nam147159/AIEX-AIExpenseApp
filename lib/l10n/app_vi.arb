@@ -10,8 +10,8 @@
   "noAccount": "Chưa có tài khoản?",
   "signUp": "Đăng ký",
 
-  "homePage": "Trang chủ",
-  "expensePage": "Chi tiêu",
-  "statisticPage": "Báo cáo",
-  "personalPage": "Cá nhân"
+  "homeScreen": "Trang chủ",
+  "expenseScreen": "Chi tiêu",
+  "statisticScreen": "Báo cáo",
+  "profileScreen": "Cá nhân"
 }
