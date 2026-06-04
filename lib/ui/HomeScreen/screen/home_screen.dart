@@ -84,48 +84,75 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: Column(
                 children: [
                   _buildExpenseInput(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Chi tiêu hôm nay',
-                        textAlign: TextAlign.left,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
+
+                  const SizedBox(height: 15),
+
                   Expanded(
                     child: Container(
                       decoration: const BoxDecoration(
                         color: Color(0xFFF6F7F8),
                         borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
                       ),
-                      child: expensesForDisplay.isEmpty
-                          ? Center(
-                              child: Text(
-                                'Chưa có chi tiêu nào',
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: const Color(0xFF98A2B3),
-                                  fontWeight: FontWeight.w500,
+                      child: ScrollConfiguration(
+                        behavior: const NoStretchScrollBehavior(),
+                        child: CustomScrollView(
+                          physics: const ClampingScrollPhysics(),
+                          slivers: [
+                            SliverToBoxAdapter(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Chi tiêu hôm nay',
+                                    textAlign: TextAlign.left,
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 20,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            )
-                            : ScrollConfiguration(
-                              behavior: const NoStretchScrollBehavior(),
-                              child: ListView.separated(
-                                physics: const ClampingScrollPhysics(),
-                                padding: const EdgeInsets.fromLTRB(10, 0, 10, 12),
-                                itemCount: expensesForDisplay.length,
-                                separatorBuilder: (_, _) => const SizedBox(height: 10),
-                                itemBuilder: (context, index) =>
-                                  _buildExpenseCard(theme, expensesForDisplay[index], viewModel),
-                              ),
                             ),
+                            const SliverToBoxAdapter(child: SizedBox(height: 10)),
+                            if (expensesForDisplay.isEmpty)
+                              SliverFillRemaining(
+                                hasScrollBody: false,
+                                child: Center(
+                                  child: Text(
+                                    'Chưa có chi tiêu nào',
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      color: const Color(0xFF98A2B3),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            else
+                              SliverPadding(
+                                padding: const EdgeInsets.fromLTRB(10, 0, 10, 12),
+                                sliver: SliverList(
+                                  delegate: SliverChildBuilderDelegate(
+                                    (context, index) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: index == expensesForDisplay.length - 1 ? 0 : 10,
+                                        ),
+                                        child: _buildExpenseCard(
+                                          theme,
+                                          expensesForDisplay[index],
+                                          viewModel,
+                                        ),
+                                      );
+                                    },
+                                    childCount: expensesForDisplay.length,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ],

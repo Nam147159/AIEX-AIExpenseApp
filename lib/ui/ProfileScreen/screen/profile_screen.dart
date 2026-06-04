@@ -7,52 +7,60 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topPadding = MediaQuery.of(context).padding.top;
-    final headerHeight = topPadding + 190;
+    const headerHeight = 150.0;
     const profileCardHeight = 200.0;
-    const profileCardOverlap = 100.0;
-    final headerSectionHeight = headerHeight - profileCardOverlap + profileCardHeight;
+    const profileCardOverlap = 60.0;
+    final headerSectionHeight = headerHeight - profileCardOverlap + profileCardHeight - 50;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF6F7F8),
-      body: Column(
-        children: [
-          SizedBox(
-            height: headerSectionHeight,
-            child: Stack(
-              children: [
-                _buildProfileHeader(context, headerHeight),
-                Positioned(
-                  left: 16,
-                  right: 16,
-                  top: headerHeight - profileCardOverlap,
-                  child: SizedBox(
-                    height: profileCardHeight,
-                    child: _buildProfileInfoCard(),
-                  ),
+      body: ScrollConfiguration(
+        behavior: const NoStretchScrollBehavior(),
+        child: CustomScrollView(
+          physics: const ClampingScrollPhysics(),
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              automaticallyImplyLeading: false,
+              toolbarHeight: kToolbarHeight,
+              elevation: 0,
+              scrolledUnderElevation: 0,
+              surfaceTintColor: Colors.transparent,
+              backgroundColor: Colors.white,
+              titleSpacing: 20,
+              title: const Text(
+                'Cá nhân',
+                style: TextStyle(
+                  color: Color(0xFF101828),
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
                 ),
-              ],
+              ),
             ),
-          ),
-          Expanded(
-            child: ScrollConfiguration(
-              behavior: const NoStretchScrollBehavior(),
-              child: SingleChildScrollView(
-                physics: const ClampingScrollPhysics(),
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: headerSectionHeight,
+                child: Stack(
+                  children: [
+                    _buildProfileHeader(height: headerHeight),
+                    _buildProfileInfoCard(),
+                  ],
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+              sliver: SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.only(top: 18),
-                      child: const Text(
-                        'TÀI KHOẢN',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.6,
-                          color: Color(0xFF98A2B3),
-                        ),
+                    const Text(
+                      'TÀI KHOẢN',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.6,
+                        color: Color(0xFF98A2B3),
                       ),
                     ),
 
@@ -89,20 +97,19 @@ class ProfileScreen extends StatelessWidget {
                       ],
                     ),
 
-                    Container(
-                      padding: const EdgeInsets.only(top: 18),
-                      child: const Text(
-                        'TÀI KHOẢN',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.6,
-                          color: Color(0xFF98A2B3),
-                        ),
+                    const SizedBox(height: 18),
+
+                    const Text(
+                      'ỨNG DỤNG',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.6,
+                        color: Color(0xFF98A2B3),
                       ),
                     ),
 
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
 
                     _buildAccountOptionsCard(
                       [
@@ -110,8 +117,8 @@ class ProfileScreen extends StatelessWidget {
                           icon: Icons.edit_outlined,
                           iconColor: const Color(0xFF3B82F6),
                           iconBackground: const Color(0xFFE9F2FF),
-                          title: 'Chỉnh sửa hồ sơ',
-                          subtitle: 'Nguyễn Văn A',
+                          title: 'Thông báo',
+                          subtitle: 'Bật tắt thông báo ứng dụng',
                           onTap: () {},
                         ),
                         const Divider(height: 1, thickness: 1, color: Color(0xFFECEFF3)),
@@ -119,8 +126,8 @@ class ProfileScreen extends StatelessWidget {
                           icon: Icons.key_outlined,
                           iconColor: const Color(0xFFFF8A00),
                           iconBackground: const Color(0xFFFFF3E6),
-                          title: 'Đổi mật khẩu',
-                          subtitle: 'Cập nhật lần cuối: 3 tháng trước',
+                          title: 'Thông báo email',
+                          subtitle: 'Gửi báo cáo chi tiêu hàng tuần',
                           onTap: () {},
                         ),
                         const Divider(height: 1, thickness: 1, color: Color(0xFFECEFF3)),
@@ -128,14 +135,26 @@ class ProfileScreen extends StatelessWidget {
                           icon: Icons.account_balance_wallet_outlined,
                           iconColor: const Color(0xFF16A34A),
                           iconBackground: const Color(0xFFE8F7EE),
-                          title: 'Ngân sách tháng',
-                          subtitle: '5,000,000 VNĐ / tháng',
+                          title: 'Cảnh báo ngân sách',
+                          subtitle: 'Khi chi tiêu vượt 80% ngân sách',
                           onTap: () {},
                         ),
                       ],
                     ),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 18),
+
+                    const Text(
+                      'BẢO MẬT',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.6,
+                        color: Color(0xFF98A2B3),
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
 
                     _buildAccountOptionsCard(
                       [
@@ -143,17 +162,8 @@ class ProfileScreen extends StatelessWidget {
                           icon: Icons.edit_outlined,
                           iconColor: const Color(0xFF3B82F6),
                           iconBackground: const Color(0xFFE9F2FF),
-                          title: 'Chỉnh sửa hồ sơ',
-                          subtitle: 'Nguyễn Văn A',
-                          onTap: () {},
-                        ),
-                        const Divider(height: 1, thickness: 1, color: Color(0xFFECEFF3)),
-                        _buildProfileOptionItem(
-                          icon: Icons.key_outlined,
-                          iconColor: const Color(0xFFFF8A00),
-                          iconBackground: const Color(0xFFFFF3E6),
-                          title: 'Đổi mật khẩu',
-                          subtitle: 'Cập nhật lần cuối: 3 tháng trước',
+                          title: 'Face ID / Touch ID',
+                          subtitle: 'Đăng nhập nhanh bằng sinh trắc học',
                           onTap: () {},
                         ),
                         const Divider(height: 1, thickness: 1, color: Color(0xFFECEFF3)),
@@ -161,154 +171,156 @@ class ProfileScreen extends StatelessWidget {
                           icon: Icons.account_balance_wallet_outlined,
                           iconColor: const Color(0xFF16A34A),
                           iconBackground: const Color(0xFFE8F7EE),
-                          title: 'Ngân sách tháng',
-                          subtitle: '5,000,000 VNĐ / tháng',
+                          title: 'Mã PIN',
+                          subtitle: 'Thiết lập mã PIN để bảo vệ tài khoản',
                           onTap: () {},
                         ),
                       ],
                     ),
+
+                    const SizedBox(height: 28),
+
+                    _buildAccountOptionsCard(
+                      [
+                        _buildProfileOptionItem(
+                          icon: Icons.edit_outlined,
+                          iconColor: const Color(0xFF3B82F6),
+                          iconBackground: const Color(0xFFE9F2FF),
+                          title: 'Đăng xuất',
+                          subtitle: 'Đăng xuất khỏi tài khoản',
+                          onTap: () {},
+                        ),
+                      ],
+                    ),                    
                   ],
                 ),
               ),
-            ) 
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildProfileHeader(BuildContext context, double height) {
+  Widget _buildProfileHeader({required double height}) {
     final gradientColors = [AppColors.gradientColorStart, AppColors.gradientColorEnd];
 
     return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(24),
-        bottomRight: Radius.circular(24),
-      ),
       child: Container(
         height: height,
         width: double.infinity,
-        padding: EdgeInsets.fromLTRB(20, MediaQuery.of(context).padding.top + 20, 20, 32),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: gradientColors,
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        alignment: Alignment.topLeft,
-        child: const Text(
-          'Cá nhân',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          color: AppColors.primaryColor,
+          // gradient: LinearGradient(
+          //   colors: gradientColors,
+          //   begin: Alignment.topCenter,
+          //   end: Alignment.bottomCenter,
+          // ),
         ),
       ),
     );
   }
 
   Widget _buildProfileInfoCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 28,
-                backgroundColor: Color(0xFFE9F2FF),
-                child: Icon(
-                  Icons.person,
-                  color: Color(0xFF3B82F6),
-                  size: 30,
-                ),
-              ),
-              SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Nguyen Van A',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF101828),
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'namnguyen147159@gmail.com',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF667085),
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      '0868 244 006',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF667085),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              IconButton(
-                icon: Icon(Icons.edit_outlined),
-                color: Color(0xFF667085),
-                iconSize: 20,
-                onPressed: () {
-
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          const Divider(height: 5, color: AppColors.dividerColor),
-          const SizedBox(height: 16),
-          IntrinsicHeight(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Center(
+      child: Container(
+        width: 400,
+        height: 200,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.08),
+              blurRadius: 16,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Row(
               children: [
-                _buildStatisticItem(
-                  value: '3.45M',
-                  label: 'Tháng này',
-                  valueColor: const Color(0xFFFF3B30),
+                CircleAvatar(
+                  radius: 28,
+                  backgroundColor: Color(0xFFE9F2FF),
+                  child: Icon(
+                    Icons.person,
+                    color: Color(0xFF3B82F6),
+                    size: 30,
+                  ),
                 ),
-                const VerticalDivider(width: 5, color: AppColors.dividerColor),
-                _buildStatisticItem(
-                  value: '5M',
-                  label: 'Ngân sách',
-                  valueColor: const Color(0xFF3B82F6),
-                ),
-                const VerticalDivider(width: 5, color: AppColors.dividerColor),
-                _buildStatisticItem(
-                  value: '47',
-                  label: 'Giao dịch',
-                  valueColor: const Color(0xFF8B5CF6),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Nguyen Van A',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF101828),
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'namnguyen147159@gmail.com',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF667085),
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        '0868 244 006',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF667085),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
+            
+            const SizedBox(height: 16),
+
+            const Divider(height: 5, color: AppColors.dividerColor),
+
+            const SizedBox(height: 16),
+            
+            IntrinsicHeight(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildStatisticItem(
+                    value: '3.45M',
+                    label: 'Tháng này',
+                    valueColor: const Color(0xFFFF3B30),
+                  ),
+                  const VerticalDivider(width: 5, color: AppColors.dividerColor),
+                  _buildStatisticItem(
+                    value: '5M',
+                    label: 'Ngân sách',
+                    valueColor: const Color(0xFF3B82F6),
+                  ),
+                  const VerticalDivider(width: 5, color: AppColors.dividerColor),
+                  _buildStatisticItem(
+                    value: '47',
+                    label: 'Giao dịch',
+                    valueColor: const Color(0xFF8B5CF6),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      )
     );
   }
 
